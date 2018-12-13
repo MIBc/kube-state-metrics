@@ -80,7 +80,7 @@ func main() {
 		glog.Info("Using default collectors")
 		collectorBuilder.WithEnabledCollectors(options.DefaultCollectors.AsSlice())
 	} else {
-                glog.Infof("Using collectors %s", opts.Collectors.String())
+		glog.Infof("Using collectors %s", opts.Collectors.String())
 		collectorBuilder.WithEnabledCollectors(opts.Collectors.AsSlice())
 	}
 
