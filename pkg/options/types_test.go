@@ -61,3 +61,64 @@ func TestCollectorSetSet(t *testing.T) {
 		}
 	}
 }
+
+func TestNamespaceListSet(t *testing.T) {
+	tests := []struct {
+		Desc   string
+		Value  string
+		Wanted NamespaceList
+	}{
+		{
+			Desc:   "empty namespacelist",
+			Value:  "",
+			Wanted: NamespaceList{},
+		},
+		{
+			Desc:  "normal namespacelist",
+			Value: "default, kube-system",
+			Wanted: NamespaceList([]string{
+				"default",
+				"kube-system",
+			}),
+		},
+	}
+
+	for _, test := range tests {
+		ns := &NamespaceList{}
+		gotError := ns.Set(test.Value)
+		if gotError != nil || !reflect.DeepEqual(*ns, test.Wanted) {
+			t.Errorf("Test error for Desc: %s. Want: %+v. Got: %+v. Got Error: %v", test.Desc, test.Wanted, *ns, gotError)
+		}
+	}
+}
+
+func TestMetricSetSet(t *testing.T) {
+	tests := []struct {
+		Desc   string
+		Value  string
+		Wanted MetricSet
+	}{
+		{
+			Desc:   "empty metrics",
+			Value:  "",
+			Wanted: MetricSet{},
+		},
+		{
+			Desc:  "normal metrics",
+			Value: "kube_cronjob_info, kube_cronjob_labels, kube_daemonset_labels",
+			Wanted: MetricSet(map[string]struct{}{
+				"kube_cronjob_info":     {},
+				"kube_cronjob_labels":   {},
+				"kube_daemonset_labels": {},
+			}),
+		},
+	}
+
+	for _, test := range tests {
+		ms := &MetricSet{}
+		gotError := ms.Set(test.Value)
+		if gotError != nil || !reflect.DeepEqual(*ms, test.Wanted) {
+			t.Errorf("Test error for Desc: %s. Want: %+v. Got: %+v. Got Error: %v", test.Desc, test.Wanted, *ms, gotError)
+		}
+	}
+}
